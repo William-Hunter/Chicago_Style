@@ -135,8 +135,7 @@
                                     <el-row class="lines">
                                         <el-row>
                                             <el-radio v-model="info.maga.magaType" label="paper">纸质版</el-radio>
-                                            <el-radio v-model="info.maga.magaType" label="URL">URL</el-radio>
-                                            <el-radio v-model="info.maga.magaType" label="DOI">DOI</el-radio>
+                                            <el-radio v-model="info.maga.magaType" label="URL/DOI">URL/DOI</el-radio>
                                         </el-row>
                                         <el-row>
                                             <el-input v-show="'paper'!=info.maga.magaType"
@@ -159,9 +158,41 @@
                     </el-col>
                 </el-main>
                 <el-footer>
-                    <el-button type="primary" round @click="generate">生成结果</el-button>
+                    <el-button type="primary" round @click="generate()">生成结果</el-button>
                 </el-footer>
             </el-container>
+
+
+            <el-dialog title="生成结果" :visible.sync="dialogVisible" width="60%" :before-close="handleDialogClose">
+                <el-row>
+                    <span><b>FOOT NOTES & END NOTES</b></span>
+                </el-row>
+                <el-row>
+                    <el-col :span="16" :offset="1">
+                        <span>{{result.notes}}</span>
+                    </el-col>
+                    <el-col :span="7">
+                        <el-button @click="" type="success" round @click="doCopy('notes')">复制到剪切板</el-button>
+                    </el-col>
+                </el-row>
+<!--                <el-divider></el-divider>-->
+                <br>
+                <el-row>
+                    <span> <b> BIBLIOGRAPHY</b></span>
+                </el-row>
+                <el-row>
+                    <el-col :span="16" :offset="1">
+                        <span>{{result.bio}}</span>
+                    </el-col>
+                    <el-col :span="7">
+                        <el-button @click="" type="success" round @click="doCopy('bio')">复制到剪切板</el-button>
+                    </el-col>
+                </el-row>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="dialogVisible = false" type="danger">关闭</el-button>
+                </span>
+            </el-dialog>
+
         </div>
     </div>
 </template>
@@ -170,6 +201,7 @@
     export default {
         data() {
             return {
+                dialogVisible: false,
                 author_options: [{
                     value: 'writer',
                     label: '作者'
@@ -188,33 +220,164 @@
                         last_name: ''
                     },
                     title: '',
-                    maga:{
-                        title:'',
-                        volume:'',
-                        issue:'',
-                        page:'',
-                        year:'',
-                        magaType:'paper',
-                        link:'',
+                    maga: {
+                        title: '',
+                        volume: '',
+                        issue: '',
+                        page: '',
+                        year: '',
+                        magaType: 'paper',
+                        link: '',
                     },
                 },
                 activeName: 'magazine',
+                format: {
+                    website: {
+                        paper: {
+                            notes: '',
+                            bio: ''
+                        },
+                        electron: {
+                            notes: '',
+                            bio: ''
+                        }
+                    },
+                    maga: {
+                        paper: {
+                            notes: ' [Author First Name] [Author Last Name], “[Article Title],” [Journal Name] [Volume], no. [Issue] ([Year Published]): [Cited Page].',
+                            bio: '[Author Last Name], [Author First Name]. “[Article Title].” [Journal Name] [Volume], no. [Issue] ([Year Published]): [Entire Page Range of Article].'
+                        },
+                        electron: {
+                            notes: '[Author First Name] [Author Last Name], “[Article Title],” [Journal Name] [Volume], no. [Issue] ([Year Published]): [Cited Page], accessed [Accessed Date], [URL/DOI].',
+                            bio: '[Author Last Name], [Author First Name]. "[Article Title].” [Journal Name] [Volume], no. [Issue] ([Year Published]): [Entire Page Range of Article]. Accessed [Accessed Date]. [URL/DOI].'
+                        }
+                    },
+                    books: {
+                        paper: {
+                            notes: '',
+                            bio: ''
+                        },
+                        electron: {
+                            notes: '',
+                            bio: ''
+                        }
+                    }
+                },
+                result: {
+                    notes: '',
+                    bio: '',
+                }
             }
         },
         methods: {
+            doCopy(type){
+                var that = this;
+                var copyText
+                if('notes'==type){
+                    copyText=this.result.notes
+                }else{
+                    copyText=this.result.bio
+                }
+
+                this.$copyText(copyText).then(function (e) {
+                    that.$message({
+                        message: '复制成功了，快去粘贴使用吧',
+                        type: 'success'
+                    });
+                }, function (e) {
+                    that.$message.error('复制失败');
+                })
+            },
+            handleDialogClose(done) {
+                this.$confirm('确认关闭？')
+                    .then(_ => {
+                        done();
+                    })
+                    .catch(_ => {});
+            },
             handleClick(tab, event) {
                 console.log(tab, event);
             },
-            generate(){
+            generate() {//生成按钮，按下
                 console.log(this.info)
+                switch (this.activeName) {
+                    case 'website':
+                        this.genWebsite()
+                        break;
+                    case 'magazine':
+                        this.genMaga()
+                        break;
+                    case 'books':
+                        this.genBooks()
+                        break;
+                }
             },
-            startHacking() {
-                this.$notify({
-                    title: 'It works!',
-                    type: 'success',
-                    message: 'We\'ve laid the ground work for you. It\'s time for you to build something epic!',
-                    duration: 5000
-                })
+            getAccessedDate(){//生成访问日期
+                var date=new Date()
+                var month_english=date.toDateString().split(" ")[1];
+                var year=date.getFullYear()
+                var day=date.getDate()
+                var fina=month_english+" "+day+","+year
+                return fina
+            },
+            genWebsite(){
+
+            },
+            genMaga() {//生成期刊的结果
+                if ('paper' == this.info.maga.magaType) {//期刊纸质
+                    this.result = this.format.maga.paper
+
+                    this.result.notes = this.result.notes.replace("[Author First Name]", this.info.author.first_name)
+                    this.result.notes = this.result.notes.replace("[Author Last Name]", this.info.author.last_name)
+                    this.result.notes = this.result.notes.replace("[Article Title]", this.info.title)
+                    this.result.notes = this.result.notes.replace("[Journal Name]", this.info.maga.title)
+                    this.result.notes = this.result.notes.replace("[Volume]", this.info.maga.volume)
+                    this.result.notes = this.result.notes.replace("[Issue]", this.info.maga.issue)
+                    this.result.notes = this.result.notes.replace("[Year Published]", this.info.maga.year)
+                    this.result.notes = this.result.notes.replace("[Cited Page]", this.info.maga.page)
+                    console.log(this.result.notes)
+                    this.result.bio = this.result.bio.replace("[Author First Name]", this.info.author.first_name)
+                    this.result.bio = this.result.bio.replace("[Author Last Name]", this.info.author.last_name)
+                    this.result.bio = this.result.bio.replace("[Article Title]", this.info.title)
+                    this.result.bio = this.result.bio.replace("[Journal Name]", this.info.maga.title)
+                    this.result.bio = this.result.bio.replace("[Volume]", this.info.maga.volume)
+                    this.result.bio = this.result.bio.replace("[Issue]", this.info.maga.issue)
+                    this.result.bio = this.result.bio.replace("[Year Published]", this.info.maga.year)
+                    this.result.bio = this.result.bio.replace("[Entire Page Range of Article]", this.info.maga.page)
+                    console.log(this.result.bio)
+                    this.dialogVisible=true;
+                } else {//期刊电子
+                    this.result = this.format.maga.electron
+
+                    var date=this.getAccessedDate()
+                    this.result.notes = this.result.notes.replace("[Author First Name]", this.info.author.first_name)
+                    this.result.notes = this.result.notes.replace("[Author Last Name]", this.info.author.last_name)
+                    this.result.notes = this.result.notes.replace("[Article Title]", this.info.title)
+                    this.result.notes = this.result.notes.replace("[Journal Name]", this.info.maga.title)
+                    this.result.notes = this.result.notes.replace("[Volume]", this.info.maga.volume)
+                    this.result.notes = this.result.notes.replace("[Issue]", this.info.maga.issue)
+                    this.result.notes = this.result.notes.replace("[Year Published]", this.info.maga.year)
+                    this.result.notes = this.result.notes.replace("[Cited Page]", this.info.maga.page)
+                    this.result.notes = this.result.notes.replace("[Accessed Date]",date )
+                    this.result.notes = this.result.notes.replace("[URL/DOI]", this.info.maga.link)
+                    // console.log(this.result.notes)
+                    this.result.bio = this.result.bio.replace("[Author First Name]", this.info.author.first_name)
+                    this.result.bio = this.result.bio.replace("[Author Last Name]", this.info.author.last_name)
+                    this.result.bio = this.result.bio.replace("[Article Title]", this.info.title)
+                    this.result.bio = this.result.bio.replace("[Journal Name]", this.info.maga.title)
+                    this.result.bio = this.result.bio.replace("[Volume]", this.info.maga.volume)
+                    this.result.bio = this.result.bio.replace("[Issue]", this.info.maga.issue)
+                    this.result.bio = this.result.bio.replace("[Year Published]", this.info.maga.year)
+                    this.result.bio = this.result.bio.replace("[Accessed Date]", date)
+                    this.result.bio = this.result.bio.replace("[URL/DOI]", this.info.maga.link)
+                    this.result.bio = this.result.bio.replace("[Entire Page Range of Article]", this.info.maga.page)
+                    // console.log(this.result.bio)
+                    // '[Author Last Name], [Author First Name]. "[Article Title].” [Journal Name] [Volume], no. [Issue] ([Year Published]): [Entire Page Range of Article]. Accessed [Accessed Date]. [URL/DOI].'
+                    this.dialogVisible=true;
+                }
+            },
+            genBooks(){//生成图书的内容
+
             }
         }
     }
@@ -229,6 +392,7 @@
     .lines {
         border: 1px solid rgba(86, 61, 124, .2);
         background-color: rgba(86, 61, 124, .15);
-        margin-bottom: 15px;
+        margin-bottom: 12px;
+        padding-bottom: 7px;
     }
 </style>
