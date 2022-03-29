@@ -1,10 +1,16 @@
 var generator = {
-    getAccessedDate: function () {//生成访问日期
+
+    getDateObject:function(){
         var date = new Date()
-        var month_english = date.toDateString().split(" ")[1];
-        var year = date.getFullYear()
-        var day = date.getDate()
-        var fina = month_english + " " + day + "," + year
+        var result={}
+        result.year = date.getFullYear()
+        result.month_english = date.toDateString().split(" ")[1];
+        result.day = date.getDate()
+        return result
+    },
+    getAccessedDate: function () {//生成访问日期
+        var dataObj=this.getDateObject()
+        var fina = dataObj.month_english + " " + dataObj.day + "," + dataObj.year
         return fina
     },
     genMaga: function (format, info) {//生成期刊的结果
@@ -86,24 +92,33 @@ var generator = {
     genWebsite: function (format, info) {
         var result = format
 
+        var date=this.getAccessedDate()
+
+        if(null==info.website.publisher || '' == info.website.publisher){
+            info.website.publisher=info.website.name
+        }
+
         result.notes = result.notes.replace("[Author First Name]", info.author.first_name)
         result.notes = result.notes.replace("[Author Last Name]", info.author.last_name)
         result.notes = result.notes.replace("[Page Title]", info.title)
         result.notes = result.notes.replace("[Name of Publisher]", info.website.publisher)
-        result.notes = result.notes.replace("[Website Name]", info.website.website_name)
-        result.notes = result.notes.replace("[Date]", info.website.date)
+        result.notes = result.notes.replace("[Website Name]", info.website.name)
+        result.notes = result.notes.replace("[Date]", date)
         result.notes = result.notes.replace("[URL]", info.website.URL)
 
         result.bio = result.bio.replace("[Author First Name]", info.author.first_name)
         result.bio = result.bio.replace("[Author Last Name]", info.author.last_name)
         result.bio = result.bio.replace("[Page Title]", info.title)
         result.bio = result.bio.replace("[Name of Publisher]", info.website.publisher)
-        result.bio = result.bio.replace("[Website Name]", info.website.website_name)
-        result.bio = result.bio.replace("[Date]", info.website.date)
+        result.bio = result.bio.replace("[Website Name]", info.website.name)
+        result.bio = result.bio.replace("[Date]", date)
         result.bio = result.bio.replace("[URL]", info.website.URL)
 
         return result
     },
+
+
+
 
 }
 

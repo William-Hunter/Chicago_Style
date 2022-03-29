@@ -11,7 +11,7 @@
                         <el-row class="lines"><!--贡献者-->
                             <el-col :span="4"  class="lines" :offset="1">
                                 <el-row>
-                                    <el-col :span="12" :offset="1">
+                                    <el-col :span="18" :offset="1">
                                         贡献者
                                     </el-col>
                                 </el-row>
@@ -42,7 +42,7 @@
                             </el-col>
                             <el-col :span="5"  class="lines" :offset="1">
                                 <el-row>
-                                    <el-col :span="11">
+                                    <el-col :span="18">
                                         中间名:
                                     </el-col>
                                 </el-row>
@@ -156,7 +156,7 @@
                     title: '',
                     maga: {title: '', volume: '', issue: '', page: '', year: '', magaType: 'paper', link: ''},
                     book: {edition: '', volume: '', publisher: '', location: '', year: '', page: ''},
-                    website:{URL:'',website_name:'',publisher:'',date:'',year:'',month:'',day:''}
+                    website:{URL:'',name:'',publisher:'',date:'',year:'',month:'',day:''}
                 },
                 dialogData: {
                     dialogVisible: false,

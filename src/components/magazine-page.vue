@@ -4,7 +4,7 @@
             <el-col class="lines" :span="22" :offset="1">
                 <el-row >
                     <el-col :span="3" >
-                        期刊标题
+                        期刊名
                     </el-col>
                 </el-row>
                 <el-row>
