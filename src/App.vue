@@ -9,7 +9,7 @@
                 <el-main>
                     <el-col :span="14" :offset="5">
                         <el-row class="lines"><!--贡献者-->
-                            <el-col :span="4"  class="lines" :offset="1">
+                            <el-col :span="4" class="lines" :offset="1">
                                 <el-row>
                                     <el-col :span="18" :offset="1">
                                         贡献者
@@ -40,7 +40,7 @@
                                     </el-input>
                                 </el-row>
                             </el-col>
-                            <el-col :span="5"  class="lines" :offset="1">
+                            <el-col :span="5" class="lines" :offset="1">
                                 <el-row>
                                     <el-col :span="18">
                                         中间名:
@@ -101,7 +101,27 @@
                     </el-col>
                 </el-main>
                 <el-footer>
-                    <el-button type="primary" round @click="generate()">生成结果</el-button>
+
+                    <el-row>
+                        <el-col :span="14" :offset="5">
+                            <el-button type="primary" round @click="generate()">生成结果</el-button>
+                            <br><br>
+                            <el-row>
+                                <div class="lines">
+                                    <p>
+                                        如果你发现任何问题，或者有建议，可以到这个项目的Github的仓库去<a href="https://github.com/William-Hunter/Chicago_Style/issues"
+                                           target="_blank">提Issue</a>
+                                    </p>
+                                    <p>
+                                        或者给我发邮件
+                                        <a href="mailto:donwilliamlone@gmail.com"
+                                           target="_blank">donwilliamlone@gmail.com</a>
+                                    </p>
+                                </div>
+                            </el-row>
+                        </el-col>
+                    </el-row>
+
                 </el-footer>
             </el-container>
 
@@ -156,7 +176,7 @@
                     title: '',
                     maga: {title: '', volume: '', issue: '', page: '', year: '', magaType: 'paper', link: ''},
                     book: {edition: '', volume: '', publisher: '', location: '', year: '', page: ''},
-                    website:{URL:'',name:'',publisher:'',date:'',year:'',month:'',day:''}
+                    website: {URL: '', name: '', publisher: '', date: '', year: '', month: '', day: ''}
                 },
                 dialogData: {
                     dialogVisible: false,
@@ -168,8 +188,8 @@
 
         },
         methods: {
-            resetResult(){
-                this.dialogData.result={notes: '生成异常', bio: '生成异常'}
+            resetResult() {
+                this.dialogData.result = {notes: '生成异常', bio: '生成异常'}
             },
             handleClick(tab, event) {
                 // console.log(tab, event);
