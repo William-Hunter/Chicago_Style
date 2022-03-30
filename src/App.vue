@@ -112,6 +112,12 @@
                                         如果你发现任何问题，或者有建议，可以到这个项目的Github的仓库去<a href="https://github.com/William-Hunter/Chicago_Style/issues"
                                            target="_blank">提Issue</a>
                                     </p>
+                                    <div>
+                                        <a href="https://github.com/andreasbm/web-skills" target="_blank" rel="noopener" aria-label="Open Github" title="Open Github">
+                                            <ws-icon hoverable=""></ws-icon>
+                                        </a>
+
+                                    </div>
                                     <p>
                                         或者给我发邮件
                                         <a href="mailto:donwilliamlone@gmail.com"
