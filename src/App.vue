@@ -1,5 +1,7 @@
 <template>
+
     <div id="app">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <div>
             <el-container>
                 <el-header>
@@ -109,15 +111,16 @@
                             <el-row>
                                 <div class="lines">
                                     <p>
-                                        如果你发现任何问题，或者有建议，可以到这个项目的Github的仓库去<a href="https://github.com/William-Hunter/Chicago_Style/issues"
-                                           target="_blank">提Issue</a>
+                                        如果你发现任何问题，或者有建议，可以到这个项目的Github的仓库去
+                                        <button style="font-size:24px">
+                                            <i class="fa fa-github">
+                                                <a href="https://github.com/William-Hunter/Chicago_Style/issues"
+                                                   target="_blank">
+                                                    提Issue
+                                                </a>
+                                            </i>
+                                        </button>
                                     </p>
-                                    <div>
-                                        <a href="https://github.com/andreasbm/web-skills" target="_blank" rel="noopener" aria-label="Open Github" title="Open Github">
-                                            <ws-icon hoverable=""></ws-icon>
-                                        </a>
-
-                                    </div>
                                     <p>
                                         或者给我发邮件
                                         <a href="mailto:donwilliamlone@gmail.com"
