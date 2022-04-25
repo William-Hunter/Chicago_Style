@@ -94,9 +94,9 @@ var generator = {
 
         var date=this.getAccessedDate()
 
-        if(null==info.website.publisher || '' == info.website.publisher){
+        // if(null==info.website.publisher || '' == info.website.publisher){
             info.website.publisher=info.website.name
-        }
+        // }
 
         result.notes = result.notes.replace("[Author First Name]", info.author.first_name)
         result.notes = result.notes.replace("[Author Last Name]", info.author.last_name)
