@@ -101,7 +101,7 @@
                             </el-tabs>
                         </el-row>
                     </el-col>
-                    <el-col :span="2" class="lines">
+                    <el-col :span="2" class="">
                         <br><br><br><br><br>
                         <el-button type="danger" round @click="this.resetInfo" >清除信息</el-button>
                     </el-col>
