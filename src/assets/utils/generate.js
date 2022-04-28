@@ -8,10 +8,28 @@ var generator = {
         result.day = date.getDate()
         return result
     },
-    getAccessedDate: function () {//生成访问日期
-        var dataObj=this.getDateObject()
-        var fina = dataObj.month_english + " " + dataObj.day + "," + dataObj.year
-        return fina
+    isEmpty: function (a) {
+        if (a === "") return true; //检验空字符串
+        if (a === "null") return true; //检验字符串类型的null
+        if (a === "undefined") return true; //检验字符串类型的 undefined
+        if (!a && a !== 0 && a !== "") return true; //检验 undefined 和 null
+        if (Array.prototype.isPrototypeOf(a) && a.length === 0) return true; //检验空数组
+        if (Object.prototype.isPrototypeOf(a) && Object.keys(a).length === 0) return true;  //检验空对象
+        return false;
+    },
+    processDate: function(website){     //生成访问日期
+        var date=null
+        if(!this.isEmpty(website.year) ||
+            !this.isEmpty(website.month) ||
+            !this.isEmpty(website.day)){
+            date= website.month + " " + website.day + "," + website.year
+            // console.log("A",date,website)
+        }else{
+            var dataObj=this.getDateObject()
+            date= dataObj.month_english + " " + dataObj.day + "," + dataObj.year
+            // console.log("B",date)
+        }
+        return date
     },
     genMaga: function (format, info) {//生成期刊的结果
         var result
@@ -38,7 +56,8 @@ var generator = {
         } else {//期刊电子
             result = format.electron
 
-            var date = this.getAccessedDate()
+            var date=this.processDate(info.website)
+
             result.notes = result.notes.replace("[Author First Name]", info.author.first_name)
             result.notes = result.notes.replace("[Author Last Name]", info.author.last_name)
             result.notes = result.notes.replace("[Article Title]", info.title)
@@ -91,12 +110,7 @@ var generator = {
 
     genWebsite: function (format, info) {
         var result = format
-
-        var date=this.getAccessedDate()
-
-        // if(null==info.website.publisher || '' == info.website.publisher){
-            info.website.publisher=info.website.name
-        // }
+        var date=this.processDate(info.website)
 
         result.notes = result.notes.replace("[Author First Name]", info.author.first_name)
         result.notes = result.notes.replace("[Author Last Name]", info.author.last_name)

@@ -24,20 +24,37 @@
         </el-row>
 
         <el-row class="lines">
-            <el-col class="lines" :span="22" :offset="1">
+            <el-col class="lines" :span="10" :offset="2">
                 <el-row>
-                    <el-col :span="3" :offset="5">
+                    <el-col :span="8" :offset="0">
                         网站名
                     </el-col>
                 </el-row>
                 <el-row>
-                    <el-col :span="13" :offset="5">
+                    <el-col :span="22" :offset="1">
                         <el-input
                                 placeholder="请输入网站名"
                                 v-model="info.website.name"
                                 clearable>
                         </el-input>
 
+                    </el-col>
+                </el-row>
+            </el-col>
+
+            <el-col class="lines" :span="8" :offset="2">
+                <el-row>
+                    <el-col :span="9" :offset="0">
+                        出版方
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="22" :offset="1">
+                        <el-input
+                                placeholder="请输入出版方"
+                                v-model="info.website.publisher"
+                                clearable>
+                        </el-input>
                     </el-col>
                 </el-row>
             </el-col>
@@ -93,7 +110,10 @@
                     <el-input
                             placeholder="请输入年"
                             v-model="info.website.year"
-                            clearable>
+                            type="number"
+                            min="1"
+                            clearable
+                    >
                     </el-input>
                 </el-row>
             </el-col>
@@ -178,6 +198,7 @@
                 }
                 // console.log("websiteName", websiteName)
                 this.info.website.name = websiteName
+                this.info.website.publisher = websiteName
 
                 var date = Generator.getDateObject()
                 // console.log("date",date)

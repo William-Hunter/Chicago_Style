@@ -101,6 +101,10 @@
                             </el-tabs>
                         </el-row>
                     </el-col>
+                    <el-col :span="2" class="lines">
+                        <br><br><br><br><br>
+                        <el-button type="danger" round @click="this.resetInfo" >清除信息</el-button>
+                    </el-col>
                 </el-main>
                 <el-footer>
 
@@ -185,7 +189,7 @@
                     title: '',
                     maga: {title: '', volume: '', issue: '', page: '', year: '', magaType: 'paper', link: ''},
                     book: {edition: '', volume: '', publisher: '', location: '', year: '', page: ''},
-                    website: {URL: '', name: '', publisher: '', date: '', year: '', month: '', day: ''}
+                    website: {URL: '', name: '', publisher: '', year: '', month: '', day: ''}
                 },
                 dialogData: {
                     dialogVisible: false,
@@ -197,6 +201,15 @@
 
         },
         methods: {
+            resetInfo(){
+                this.info={//保存用户输入的数据
+                    author: {first_name: '', mid_name: '', last_name: ''},
+                    title: '',
+                    maga: {title: '', volume: '', issue: '', page: '', year: '', magaType: 'paper', link: ''},
+                    book: {edition: '', volume: '', publisher: '', location: '', year: '', page: ''},
+                    website: {URL: '', name: '', publisher: '', year: '', month: '', day: ''}
+                }
+            },
             resetResult() {
                 this.dialogData.result = {notes: '生成异常', bio: '生成异常'}
             },
